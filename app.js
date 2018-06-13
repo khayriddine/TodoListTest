@@ -2,7 +2,10 @@ var http = require('http');
 var fs = require('fs');
 
 var server = http.createServer(function(req,res){
-    res.send('<h1>Hello World</h1>');
+    fs.readFile('./index.html','utf-8',function(err,content){
+        res.writeHead(200,{ "content-type":"text/html" });
+        res.end(content);
+    });
 });
 
 var io = require('socket.io').listen(server);

@@ -1,0 +1,42 @@
+<!DOCTYPE>
+
+<html>
+    <head>
+        <title>Tp CHAT</title>
+        <head charset="utf-8"/>
+    </head>
+    <body>
+            
+                <input type="text" name="message" id="message" placeholder="Votre message..." size="50" autofocus />
+                <input type="submit" onclick="envoyer()" value="Envoyer" />
+            
+    
+            <section id="zone_chat">
+                
+            </section>
+    
+    
+            <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+            <script src="/socket.io/socket.io.js"></script>
+            <script>
+                var socket = io.connect("https://ggizi.herokuapp.com/");
+                var pseudo = prompt("Quel est votre nom :");
+                socket.emit('pseudo',pseudo);
+                function envoyer(){
+                    var message = $('#message').val();
+                    socket.emit('message',message);
+                    insererMessage(pseudo,message);
+                    $('#message').val('').focus();
+                }
+                
+                socket.on('message',function(message){
+                    insererMessage(message.from,message.contenu);
+                })
+                function insererMessage(pseudo,message){
+                    $('#zone_chat').prepend("<p><strong>"+pseudo+"</strong> : "+message+" </p>")
+                }
+            </script>
+    </body>
+
+    
+</html>
